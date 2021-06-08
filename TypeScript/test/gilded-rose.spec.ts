@@ -7,37 +7,44 @@ describe('Gilded Rose', () => {
 
     describe('General tests', () => {
         var gildedRose: GildedRose;
-        
+        var item: Item[];
         beforeEach(() => {
-            gildedRose = new GildedRose([new Item('foo', 5, 5)]);
+            item = [new Item('foo', 5, 5)];
+            gildedRose = new GildedRose(item);
         });
+
+        it('should return array of items', () => {
+            var result = gildedRose.updateQuality();
+            expect(result).to.equal(item);
+        })
         
         it('Foo should be added to item array', () => {
-            const items = gildedRose.items[0];
+            const items = gildedRose.updateQuality()[0];
+            debugger;
             expect(items.name).to.equal('foo');
         });
         
         it('should give back updated sellIn ', () => {
-            const items = gildedRose.items[0];
+            const items = gildedRose.updateQuality()[0];
             expect(items.sellIn).to.equal(4);
         });
         
         it('should give back updated quality', () => {
-            const items = gildedRose.items[0];
+            const items = gildedRose.updateQuality()[0];
             expect(items.quality).to.equal(4);
         });
 
         
         it('Quality decreases twice as fast after sellIn date', () => {
             gildedRose.items[0].sellIn = -1;
-            const items = gildedRose.items[0];
+            const items = gildedRose.updateQuality()[0];
             expect(items.quality).to.equal(3);
         });
 
         it('Quality should not go negative', () => {
             gildedRose.items[0].quality = 0;
             gildedRose.items[0].sellIn = -1;
-            const items = gildedRose.items[0];
+            const items = gildedRose.updateQuality()[0];
             expect(items.quality).to.equal(0);
         });
     });
@@ -54,41 +61,41 @@ describe('Gilded Rose', () => {
         });
         
         it('Backstage passes to a TAFKAL80ETC concert should be added to item array', () => {
-            const items = gildedRose.items[0];
+            const items = gildedRose.updateQuality()[0];
             expect(items.name).to.equal('Backstage passes to a TAFKAL80ETC concert');
         });
         
         it('should give back updated sellIn ', () => {
-            const items = gildedRose.items[0];
+            const items = gildedRose.updateQuality()[0];
             expect(items.sellIn).to.equal(9);
         });
         
         it('should give back updated quality, Backstage passes increase in quality as days go on', () => {
             gildedRose.items[0].sellIn = 12;
-            const items = gildedRose.items[0];
+            const items = gildedRose.updateQuality()[0];
             expect(items.quality).to.equal(6);
         });
 
         it('Backstage pass quality should increase by 2 with 10 or less days', () => {
-            const items = gildedRose.items[0];
+            const items = gildedRose.updateQuality()[0];
             expect(items.quality).to.equal(7);
         });
 
         it('Backstage pass quality should increase by 3 with 5 or less days', () => {
             gildedRose.items[0].sellIn = 2;
-            const items = gildedRose.items[0];
+            const items = gildedRose.updateQuality()[0];
             expect(items.quality).to.equal(8);
         });
 
         it('Backstage Pass quality drops to 0 after concert', () => {
             gildedRose.items[0].sellIn = -1;
-            const items = gildedRose.items[0];
+            const items = gildedRose.updateQuality()[0];
             expect(items.quality).to.equal(0);
         });
 
         it('Backstage Pass quality caps at 50', () => {
             gildedRose.items[0].quality = 50;
-            const items = gildedRose.items[0];
+            const items = gildedRose.updateQuality()[0];
             expect(items.quality).to.equal(50);
         });
     });
@@ -105,29 +112,29 @@ describe('Gilded Rose', () => {
         });
         
         it('Aged Brie should be added to item array', () => {
-            const items = gildedRose.items[0];
+            const items = gildedRose.updateQuality()[0];
             expect(items.name).to.equal('Aged Brie');
         });
         
         it('should give back updated sellIn ', () => {
-            const items = gildedRose.items[0];
+            const items = gildedRose.updateQuality()[0];
             expect(items.sellIn).to.equal(6);
         });
         
         it('should give back updated quality, Aged Brie increases in quality as days go on', () => {
-            const items = gildedRose.items[0];
+            const items = gildedRose.updateQuality()[0];
             expect(items.quality).to.equal(12);
         });
 
         it('Aged Brie quality caps at 50', () => {
             gildedRose.items[0].quality = 50;
-            const items = gildedRose.items[0];
+            const items = gildedRose.updateQuality()[0];
             expect(items.quality).to.equal(50);
         });
         
         it('Aged Brie quality continues to go up even after sellIn date passes', () => {
             gildedRose.items[0].sellIn = -12;
-            const items = gildedRose.items[0];
+            const items = gildedRose.updateQuality()[0];
             expect(items.quality).to.equal(13);
         });
     });
@@ -144,23 +151,23 @@ describe('Gilded Rose', () => {
         });
         
         it('Sulfuras, Hand of Ragnaros should be added to item array', () => {
-            const items = gildedRose.items[0];
+            const items = gildedRose.updateQuality()[0];
             expect(items.name).to.equal('Sulfuras, Hand of Ragnaros');
         });
         
         it('Sulfuras, Hand of Ragnaros, should not have an updated sellIn ', () => {
-            const items = gildedRose.items[0];
+            const items = gildedRose.updateQuality()[0];
             expect(items.sellIn).to.equal(1);
         });
         
         it('Sulfuras, Hand of Ragnaros quality should not change', () => {
-            const items = gildedRose.items[0];
+            const items = gildedRose.updateQuality()[0];
             expect(items.quality).to.equal(80);
         });
 
         it('Sulfuras, Hand of Ragnaros should not have degraded quality even after sellIn date passes', () => {
             gildedRose.items[0].sellIn = -10;
-            const items = gildedRose.items[0];
+            const items = gildedRose.updateQuality()[0];
             expect(items.quality).to.equal(80);
         });
     });
