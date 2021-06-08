@@ -7,13 +7,20 @@ describe('Gilded Rose', () => {
 
     describe('General tests', () => {
         var gildedRose: GildedRose;
-        
+        var item: Item[];
         beforeEach(() => {
-            gildedRose = new GildedRose([new Item('foo', 5, 5)]);
+            item = [new Item('foo', 5, 5)];
+            gildedRose = new GildedRose(item);
         });
+
+        it('should return array of items', () => {
+            var result = gildedRose.updateQuality();
+            expect(result).to.equal(item);
+        })
         
         it('Foo should be added to item array', () => {
             const items = gildedRose.updateQuality()[0];
+            debugger;
             expect(items.name).to.equal('foo');
         });
         

@@ -1,3 +1,5 @@
+const maxQuality = 50;
+const minQuality = 0;
 // class to create items with name, sell by date, and quality
 export class Item {
     name: string;
@@ -17,62 +19,80 @@ export class GildedRose {
     constructor(items = [] as Array<Item>) {
         this.items = items;
     }
-
-    // Method for updating item quality
+    //Method for updating item quality
     updateQuality() {
-        var maxQuality = 50;
-        var minQuality = 0;
         var conjured = 'Conjured';
-        for (let i = 0; i < this.items.length; i++) {
-            if (this.items[i].name != 'Aged Brie' && this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert' 
-            && this.items[i].name != 'Sulfuras, Hand of Ragnaros' && this.items[i].quality >minQuality) {
-                    this.items[i].quality -=1;
-            } else {
-                if (this.items[i].quality < maxQuality) {
-                    this.items[i].quality += 1;
-                    if (this.items[i].name == 'Backstage passes to a TAFKAL80ETC concert') {
-                        if (this.items[i].sellIn <= 10 && this.items[i].sellIn > 5) {
-                            // quality goes up by 2 when days are 10 or less
-                            if (this.items[i].quality < maxQuality) {
-                                this.items[i].quality += 1;
-                            }
-                        }
-                       // quality goes up by 3 when days are 5 of less
-                        else if (this.items[i].sellIn <= 5) {
-                            if (this.items[i].quality < maxQuality) {
-                                this.items[i].quality += 2;
-                            }
-                        }
-                    }
-                }
+        var ragnaros = 'Sulfuras, Hand of Ragnaros';
+        var cheese = 'Aged Brie';
+        var concertPass = 'Backstage passes to a TAFKAL80ETC concert';
+
+        this.items.forEach(item => {
+            if(item.name == cheese){
+                cheesyFunction(item);
             }
-            // checking for legendary to subtract sell by date 
-            if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-                this.items[i].sellIn -= 1;
+
+            else if(item.name == ragnaros){
+                sulfurasHand(item);
             }
-            
-            if (this.items[i].sellIn < 0) {
-                if (this.items[i].name != 'Aged Brie') {
-                    if (this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-                        if (this.items[i].quality > minQuality) {
-                            // move this if above line 57 if 
-                            if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-                                this.items[i].quality -= 1;
-                            }
-                        }                        
-                    // set quality to 0 after sellIn date passes
-                    } else {
-                        this.items[i].quality = 0;
-                    }
-                    //  aged brie increases in quality here
-                } else if (this.items[i].name == 'Aged Brie') {
-                    if (this.items[i].quality < maxQuality) {
-                        this.items[i].quality += 1;
-                    }
-                }
+
+            else if(item.name == concertPass){
+               backstagePass(item);
             }
-        }
-        
+
+            else{
+              normalThing(item);
+            }
+        })
         return this.items;
+    } 
+}// end class
+
+function cheesyFunction(item){
+    if(item.quality < maxQuality){
+        item.quality += 1;
+        item.sellIn -= 1;
     }
+    if(item.sellIn <= 0){
+        item.quality += 1;
+    }
+    return ; 
+}
+
+function sulfurasHand(item){
+    item.quality = 80;
+    return ;
+}
+
+function backstagePass(item){
+    const day1 = 10;
+    const day2 = 5;
+
+    if (item.quality < maxQuality){
+        item.quality += 1;
+        item.sellIn -= 1;
+        if (item.sellIn <= day1){
+        item.quality += 1;
+        }
+        if(item.sellIn <= day2){
+            item.quality += 1;
+        }
+    }
+    if(item.sellIn <= 0){
+        item.quality = 0;
+    }
+    return ;
+}
+
+function normalThing(item){
+    
+    item.sellIn -= 1;
+    item.quality -= 1;
+
+    if(item.sellIn < 0){
+        item.quality -= 1;
+    }
+    if(item.quality < 0){
+        item.quality = 0;
+    }
+    return ;
 }
