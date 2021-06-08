@@ -173,6 +173,55 @@ describe('Gilded Rose', () => {
     });
 }); 
 
+// tests for conjured items
+describe('Gilded Rose', () => {
+
+    describe('Conjured tests', () => {
+        var gildedRose: GildedRose;
+        var item: Item[];
+        beforeEach(() => {
+            item = [new Item('Conjured Mana Cake',10, 15)];
+            gildedRose = new GildedRose(item);
+        });
+
+        it('should return array of items', () => {
+            var result = gildedRose.updateQuality();
+            expect(result).to.equal(item);
+        })
+        
+        it('Conjured should be added to item array', () => {
+            const items = gildedRose.updateQuality()[0];
+            debugger;
+            expect(items.name).to.equal('Conjured Mana Cake');
+        });
+        
+        it('should give back updated sellIn ', () => {
+            const items = gildedRose.updateQuality()[0];
+            expect(items.sellIn).to.equal(9);
+        });
+        
+        it('should give back updated quality, quality should decrease by 2', () => {
+            const items = gildedRose.updateQuality()[0];
+            expect(items.quality).to.equal(13);
+        });
+
+        
+        it('Quality decreases twice as fast after sellIn date, should decrease by 4', () => {
+            gildedRose.items[0].sellIn = -1;
+            const items = gildedRose.updateQuality()[0];
+            expect(items.quality).to.equal(11);
+        });
+
+        it('Quality should not go negative', () => {
+            gildedRose.items[0].quality = 0;
+            gildedRose.items[0].sellIn = -1;
+            const items = gildedRose.updateQuality()[0];
+            expect(items.quality).to.equal(0);
+        });
+    });
+}); 
+
+
 // tests for multiple items 
 describe('Testing with multiple items at once', () => {
     var gildedRose: GildedRose;
@@ -186,6 +235,9 @@ describe('Testing with multiple items at once', () => {
             new Item('Wizards Hat', 20, 25),
             new Item('Kings Crown', 75, 45),
             new Item('Backstage passes to a TAFKAL80ETC concert', 10, 12),
+            new Item('Conjured Armor', 15, 10),
+            new Item('Conjured Potions', 17, 37),
+            new Item('Conjured Weapons', -1, 8),
         ]);
     });
     // Expect Sulfuras, Hand of Ragnaros sellIn to stay the same, all others to decrease
@@ -198,6 +250,9 @@ describe('Testing with multiple items at once', () => {
         expect(items[4].sellIn).to.equal(19);
         expect(items[5].sellIn).to.equal(74);
         expect(items[6].sellIn).to.equal(9);
+        expect(items[7].sellIn).to.equal(14);
+        expect(items[8].sellIn).to.equal(16);
+        expect(items[9].sellIn).to.equal(-2);
     });
     // expect Sulfuras, Hand of Ragnaros quality to stay the same, Aged brie and Concert tickets to increase, all else to decrease
     it('should degrade all Quality values on update', () => {
@@ -209,6 +264,10 @@ describe('Testing with multiple items at once', () => {
         expect(items[4].quality).to.equal(24);
         expect(items[5].quality).to.equal(44);
         expect(items[6].quality).to.equal(14);
+        expect(items[7].quality).to.equal(8);
+        expect(items[8].quality).to.equal(35);
+        expect(items[9].quality).to.equal(4);
         
     });        
 });
+

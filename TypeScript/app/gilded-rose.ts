@@ -38,6 +38,11 @@ export class GildedRose {
             else if(item.name == concertPass){
                backstagePass(item);
             }
+            
+            else if(item.name.indexOf(conjured) > -1){
+                conjuredFunction(item);
+            }
+
 
             else{
               normalThing(item);
@@ -84,7 +89,6 @@ function backstagePass(item){
 }
 
 function normalThing(item){
-    
     item.sellIn -= 1;
     item.quality -= 1;
 
@@ -94,5 +98,20 @@ function normalThing(item){
     if(item.quality < 0){
         item.quality = 0;
     }
+    return ;
+}
+
+function conjuredFunction(item){
+    item.sellIn -= 1;
+    item.quality -= 2;
+
+    if(item.sellIn < 0){
+        item.quality -= 2;
+    }
+
+    if(item.quality < 0){
+        item.quality = 0;
+    }
+
     return ;
 }
